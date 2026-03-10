@@ -1,36 +1,77 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Riyadh Pulse Navigator (Prototype)
 
-## Getting Started
+A production-ready starter for a **client-side turn-by-turn navigation** experience using the Next.js App Router and TypeScript.
 
-First, run the development server:
+## Tech Stack
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- Next.js (App Router under `src/app`)
+- TypeScript
+- MapLibre GL JS (browser-loaded)
+- Turf.js (browser-loaded)
+- Native Geolocation API via custom hooks
+- Speech Synthesis API for voice guidance
+
+## Package-level Architecture
+
+- **UI layer (`src/components`)**
+  - Stateless and stateful components for planning, navigation, and map rendering.
+- **Hook layer (`src/hooks`)**
+  - Browser capability wrappers (`useGeolocation`, `useSpeechSynthesis`) and navigation progress logic (`useNavigationProgress`).
+- **Domain/util layer (`src/lib`)**
+  - API integration (`tomtom.ts`), geospatial math (`geospatial.ts`), and thresholds/config (`constants.ts`).
+- **Type layer (`src/types`)**
+  - Shared types for route shape, instructions, navigation state, and geolocation state.
+- **App entry (`src/app`)**
+  - Server layout/page shells with client AppShell composition.
+
+## Folder Structure
+
+```text
+src/
+  app/
+    favicon.ico
+    globals.css
+    layout.tsx
+    page.tsx
+  components/
+    AppShell.tsx
+    map/
+      MapView.tsx
+    navigation/
+      NavigationPanel.tsx
+    planning/
+      PlanningPanel.tsx
+  hooks/
+    useGeolocation.ts
+    useNavigationProgress.ts
+    useSpeechSynthesis.ts
+  lib/
+    constants.ts
+    geospatial.ts
+    tomtom.ts
+  types/
+    navigation.ts
+    vendor.d.ts
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+NEXT_PUBLIC_TOMTOM_API_KEY=your_tomtom_key
+```
 
-## Learn More
+## Run
 
-To learn more about Next.js, take a look at the following resources:
+```bash
+npm install
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Notes
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Route planning is powered by TomTom in `src/lib/tomtom.ts`.
+- Geospatial progress evaluation and off-route detection are in `src/lib/geospatial.ts`.
+- Threshold tuning constants live in `src/lib/constants.ts`.
+- The home page already contains placeholders and baseline flows for planning mode and navigation mode.
